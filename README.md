@@ -1,4 +1,4 @@
-# SEMICON 2026 — Synthetic SEM Image Generator (Drift-Sense)
+# SEMICON 2026 : Synthetic SEM Image Generator (Drift-Sense)
 
 **Applied Materials Hackathon** · Synthetic Scanning Electron Microscope (SEM) image generator for semiconductor inspection, defect detection, and navigation-error recovery (Drift-Sense) benchmarking.
 
