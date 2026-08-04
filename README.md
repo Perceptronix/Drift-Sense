@@ -2,7 +2,7 @@
 
 **Applied Materials Hackathon** · Synthetic Scanning Electron Microscope (SEM) image generator for semiconductor inspection, defect detection, and navigation-error recovery (Drift-Sense) benchmarking.
 
-> A deterministic, physics-based simulator that generates large-scale, scientifically-grounded synthetic SEM datasets with pixel-accurate ground truth — from GDSII semiconductor layouts to training-ready 16-bit TIFF images.
+> A deterministic, physics-based simulator that generates large-scale, scientifically-grounded synthetic SEM datasets with pixel-accurate ground truth from GDSII semiconductor layouts to training-ready 16-bit TIFF images.
 
 ---
 
