@@ -1,0 +1,74 @@
+[
+  {
+    "workers": 4,
+    "n_ok": 200,
+    "n_fail": 0,
+    "wall_s": 1311.6,
+    "spm": 9.1,
+    "pps": 6.558,
+    "avg_wall_per_sample": 24.426,
+    "p50": 3.277,
+    "p95": 214.434,
+    "disk_mb": 2227.0,
+    "avg_stages": {
+      "rasterize_s": 21.2111,
+      "process_s": 0.2434,
+      "variability_s": 1.6745,
+      "signal_s": 0.4214,
+      "degrade_s": 0.2448,
+      "formation_s": 0.0396,
+      "groundtruth_s": 0.1176,
+      "write_s": 0.4644,
+      "total_s": 24.4172
+    },
+    "failures": []
+  },
+  {
+    "workers": 6,
+    "n_ok": 200,
+    "n_fail": 0,
+    "wall_s": 1026.7,
+    "spm": 11.7,
+    "pps": 5.133,
+    "avg_wall_per_sample": 28.176,
+    "p50": 3.239,
+    "p95": 263.192,
+    "disk_mb": 2227.1,
+    "avg_stages": {
+      "rasterize_s": 25.0306,
+      "process_s": 0.2355,
+      "variability_s": 1.6339,
+      "signal_s": 0.4714,
+      "degrade_s": 0.2497,
+      "formation_s": 0.0435,
+      "groundtruth_s": 0.1285,
+      "write_s": 0.3742,
+      "total_s": 28.1677
+    },
+    "failures": []
+  },
+  {
+    "workers": 8,
+    "n_ok": 200,
+    "n_fail": 0,
+    "wall_s": 892.6,
+    "spm": 13.4,
+    "pps": 4.463,
+    "avg_wall_per_sample": 31.908,
+    "p50": 3.668,
+    "p95": 301.119,
+    "disk_mb": 2227.6,
+    "avg_stages": {
+      "rasterize_s": 28.326,
+      "process_s": 0.2666,
+      "variability_s": 1.8483,
+      "signal_s": 0.5451,
+      "degrade_s": 0.3007,
+      "formation_s": 0.051,
+      "groundtruth_s": 0.1611,
+      "write_s": 0.3999,
+      "total_s": 31.8994
+    },
+    "failures": []
+  }
+]

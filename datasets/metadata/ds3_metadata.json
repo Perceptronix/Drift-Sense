@@ -1,0 +1,19 @@
+{
+  "$comment": "DS3 dataset-level metadata record (TEMPLATE). Populated at generation time.",
+  "dataset": "ds3_validation",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0",
+  "purpose": "milestone gates L1-L5, cross-module consistency",
+  "n_samples": 1000,
+  "structure_distribution": { "stratified": "100 per structure type" },
+  "parameter_coverage": "full certified ranges, stratified",
+  "master_seed": 3003,
+  "image_size": [1024, 1024],
+  "pixel_size_nm": 1.0,
+  "ground_truth": "full",
+  "validation_gates": ["L1", "L2", "L3", "L5"],
+  "expected_size_gb": 4,
+  "status": "NOT_YET_GENERATED",
+  "generation_date": null,
+  "release_criteria_met": false
+}

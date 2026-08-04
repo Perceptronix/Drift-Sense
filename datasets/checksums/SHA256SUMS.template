@@ -1,0 +1,12 @@
+# SHA-256 checksum registry — TEMPLATE
+# Populated after dataset generation. One line per file: "<hash>  <relative path>"
+# Verification: sh checksums/verify_checksums.sh <dataset_root>
+#
+# Format (same-platform bitwise determinism guaranteed):
+#   9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08  images/000000.tiff
+
+# ds1_development — populate after generation
+# ds2_unit_test — populate after generation
+# ds3_validation — populate after generation
+# ds4_scientific_benchmark — populate after generation
+# ds5_final_training — populate after generation

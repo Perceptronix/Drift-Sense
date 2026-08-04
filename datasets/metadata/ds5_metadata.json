@@ -1,0 +1,24 @@
+{
+  "$comment": "DS5 dataset-level metadata record (TEMPLATE). Populated at generation time.",
+  "dataset": "ds5_final_training",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0",
+  "purpose": "primary deliverable — ML/CD-SEM benchmarking dataset",
+  "n_samples": 100000,
+  "structure_distribution": {
+    "dense_ls": 20.0, "contact": 15.0, "via": 10.0, "iso_line": 15.0,
+    "fin": 10.0, "gate": 10.0, "trench": 8.0, "sti": 5.0,
+    "bimaterial": 4.0, "pitch_std": 3.0
+  },
+  "parameter_coverage": "full certified ranges, random sampling",
+  "master_seed": 5005,
+  "image_size": [1024, 1024],
+  "pixel_size_nm": 1.0,
+  "ground_truth": "full",
+  "validation_gates": ["L1", "L2", "L3", "L4", "L5"],
+  "splits": { "train": 70000, "val": 15000, "test": 15000 },
+  "expected_size_gb": 400,
+  "status": "NOT_YET_GENERATED",
+  "generation_date": null,
+  "release_criteria_met": false
+}

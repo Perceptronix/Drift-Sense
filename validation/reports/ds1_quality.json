@@ -1,0 +1,46 @@
+{
+  "total_samples": 50,
+  "status": {
+    "OK": 50,
+    "FAILED": 0
+  },
+  "structure_distribution": {
+    "bimaterial": 5,
+    "contact": 5,
+    "gate": 5,
+    "dense_ls": 5,
+    "trench": 5,
+    "pitch_std": 5,
+    "via": 5,
+    "iso_line": 5,
+    "fin": 5,
+    "sti": 5
+  },
+  "metadata_completeness": {
+    "total": 50,
+    "images_present": 50,
+    "gt_present": 50,
+    "meta_present": 50,
+    "img_missing": 0,
+    "gt_missing": 0,
+    "meta_missing": 0
+  },
+  "height_stats": {
+    "n_samples": 50,
+    "overall_min": 8.135348763190107,
+    "overall_max": 231.98644819816215,
+    "overall_mean": 125.70599008647883
+  },
+  "cd_statistics": {
+    "n_measurements": 445,
+    "mean_cd_nm": 46.18,
+    "std_cd_nm": 28.62286082483288,
+    "min_cd_nm": 0.0,
+    "max_cd_nm": 127.9
+  },
+  "checksum_verification": {
+    "verified": true,
+    "valid_files": 355,
+    "invalid_files": 0
+  }
+}

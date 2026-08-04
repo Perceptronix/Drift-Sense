@@ -1,0 +1,77 @@
+# DS5 Final-Training Dataset — Generation Config
+# Purpose: primary deliverable — ML/CD-SEM benchmarking dataset
+# Version: 1.0.0 | Master seed: 5005 | Size: 100,000 @1024x1024
+# Frozen: Phase 5.5, Document 05
+# NOTE: structure weighting requires stakeholder review before release (Phase 5.5)
+
+dataset:
+  name: ds5_final_training
+  version: 1.0.0
+  mode: sweep
+  n_samples: 100000
+  master_seed: 5005
+  license: "CC BY 4.0"
+
+image:
+  width: 1024
+  height: 1024
+  pixel_size_nm: 1.0
+  bit_depth: 16
+
+structure_distribution:            # application-weighted (pending stakeholder review)
+  dense_ls: 20.0
+  contact: 15.0
+  via: 10.0
+  iso_line: 15.0
+  fin: 10.0
+  gate: 10.0
+  trench: 8.0
+  sti: 5.0
+  bimaterial: 4.0
+  pitch_std: 3.0
+
+materials:                         # realistic process stacks (Phase 1 library)
+  - 1   # Si
+  - 2   # SiO2
+  - 3   # SiN
+  - 4   # Cu
+  - 5   # W
+  - 6   # PR
+
+parameter_ranges:                  # full certified ranges, random sampling
+  cd_nm: [10, 500]
+  height_nm: [20, 200]
+  pitch_nm: [20, 1000]
+  sampling: random
+
+variability:
+  ler_3sigma_nm: [0.0, 5.0]
+  ler_xi_nm: [5, 100]
+  overlay_nm: [0.0, 10.0]
+  cdu_sigma_nm: [0.0, 2.0]
+
+physics:
+  beam_energy_keV: [0.3, 30.0]
+  probe_current_pA: [1.0, 1000.0]
+  probe_diameter_nm: [0.5, 10.0]
+  noise_enabled: true
+  charging_enabled: [false, true]
+
+ground_truth: true
+artifacts: [image, ground_truth, config, metadata]
+
+splits:
+  train: 0.70    # 70,000
+  val: 0.15      # 15,000
+  test: 0.15     # 15,000
+  stratification: by_structure_type
+  leakage_control: disjoint_sample_sets
+
+validation_gates: [L1, L2, L3, L4, L5]
+release_criteria:
+  - "all L1-L5 validation pass"
+  - "statistical coverage checks pass"
+  - "benchmark-readiness review complete"
+  - "stakeholder sign-off on structure weighting"
+
+expected_size: "~400 GB"

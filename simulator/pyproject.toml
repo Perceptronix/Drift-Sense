@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "semicon-sim"
+version = "0.1.0"
+description = "Applied Materials SEMICON 2026 Synthetic SEM Image Generator (DG1)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "CC BY 4.0" }
+authors = [{ name = "SEMICON 2026 Implementation Team" }]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "scikit-image>=0.21",
+    "Pillow>=9.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+semicon-sim = "semicon.orchestration.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

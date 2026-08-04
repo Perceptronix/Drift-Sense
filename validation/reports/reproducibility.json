@@ -1,0 +1,6 @@
+{
+  "determinism_bitwise": true,
+  "determinism_metadata": true,
+  "different_seed_different_output": true,
+  "ds1_files_exist": 50
+}

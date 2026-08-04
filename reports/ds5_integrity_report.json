@@ -1,0 +1,13 @@
+{
+  "image_count": 10,
+  "ground_truth_count": 10,
+  "metadata_count": 10,
+  "expected_count": 10,
+  "missing_images": [],
+  "missing_ground_truth": [],
+  "missing_metadata": [],
+  "checksum_verified": 10,
+  "checksum_total": 10,
+  "duplicates_found": [],
+  "all_artifacts_present": true
+}

@@ -1,0 +1,58 @@
+{
+  "$comment": "Canonical dataset-level index schema (Phase 4.4 doc 03). Emitted as dataset_index.json per dataset. Aggregates all samples + generation provenance.",
+  "type": "object",
+  "required": [
+    "dataset", "dataset_version", "schema_version", "n_samples",
+    "n_success", "n_failed", "structure_distribution", "rng_master_seed",
+    "provenance", "license"
+  ],
+  "properties": {
+    "dataset": { "type": "string" },
+    "dataset_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "schema_version": { "type": "string" },
+    "generation_date": { "type": "string", "format": "date-time" },
+    "n_samples": { "type": "integer" },
+    "n_success": { "type": "integer" },
+    "n_failed": { "type": "integer" },
+    "structure_distribution": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
+    },
+    "parameter_ranges": { "type": "object" },
+    "rng_master_seed": { "type": "integer" },
+    "splits": {
+      "type": "object",
+      "properties": {
+        "train": { "type": "array", "items": { "type": "integer" } },
+        "val": { "type": "array", "items": { "type": "integer" } },
+        "test": { "type": "array", "items": { "type": "integer" } }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "app_version": { "type": "string" },
+        "git_hash": { "type": "string" },
+        "generation_config": { "type": "string" }
+      }
+    },
+    "license": { "type": "string" },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sample_index", "structure_type", "status", "artifacts"],
+        "properties": {
+          "sample_index": { "type": "integer" },
+          "structure_type": { "type": "string" },
+          "status": { "type": "string", "enum": ["OK", "RETRY", "FAILED", "ABORT"] },
+          "artifacts": { "type": "object" },
+          "file_hashes": {
+            "type": "object",
+            "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,114 @@
+# ============================================================
+# SEMICON 2026 — .gitignore
+# Applied Materials Hackathon: Synthetic SEM Image Generator
+# ============================================================
+
+# -----------------------------------------------------------
+# Generated Datasets (images, ground truth, metadata per sample)
+# These are regenerated — do NOT commit to git.
+# Use HuggingFace or cloud storage for dataset distribution.
+# -----------------------------------------------------------
+# SEM images
+datasets/*/images/
+datasets/*/images/**
+*.tiff
+*.tif
+
+# Ground truth outputs (height maps, material maps, GT JSON)
+datasets/*/ground_truth/
+datasets/*/ground_truth/**
+*.npy
+
+# Per-sample metadata (config, metadata, timing JSON)
+datasets/*/metadata/
+datasets/*/metadata/**
+
+# Dataset indexes, checksums, checkpoints, GDS layouts
+datasets/*/dataset_index.json
+datasets/*/SHA256SUMS
+datasets/*/*.gds
+datasets/*/_lib.gds
+datasets/*/_bench_test_lib.gds
+datasets/*/_lib_validation.gds
+datasets/*/*.bak
+
+# Root-level GDS files in datasets/
+datasets/*.gds
+
+# DS5 generation checkpoints
+datasets/**/checkpoint.json
+datasets/**/checkpoint.json.bak
+
+# Simulator demo output
+simulator/demo_output/
+
+# -----------------------------------------------------------
+# Python
+# -----------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / build
+*.egg-info/
+*.egg
+dist/
+build/
+eggs/
+*.whl
+*.tar.gz
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# pytest / testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Benchmarks
+.benchmarks/
+
+# -----------------------------------------------------------
+# Claude Code (contains local proxy config — keep private)
+# -----------------------------------------------------------
+.claude/
+
+# -----------------------------------------------------------
+# Temporary / Profiling / Debug
+# -----------------------------------------------------------
+tmp_bench/
+tmp_profile/
+tmp_*/
+temp/
+temp_*/
+
+# -----------------------------------------------------------
+# Logs
+# -----------------------------------------------------------
+logs/
+*.log
+
+# -----------------------------------------------------------
+# OS / Editor junk
+# -----------------------------------------------------------
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

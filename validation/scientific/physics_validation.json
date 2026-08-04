@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-07-31T11:42:13",
+  "n_tests": 12,
+  "n_pass": 12,
+  "n_fail": 0,
+  "results": [
+    {
+      "test": "T1: Si SE yield in [0.4,0.8]",
+      "measured": "0.5713",
+      "pass": true
+    },
+    {
+      "test": "T2: BSE W > Cu",
+      "measured": "Cu=0.2784, W=0.3580",
+      "pass": true
+    },
+    {
+      "test": "T3: Si BSE in [0.15,0.25]",
+      "measured": "0.2152",
+      "pass": true
+    },
+    {
+      "test": "T4: Edge brightening ratio",
+      "measured": "2.000",
+      "pass": true
+    },
+    {
+      "test": "T5: PSF FWHM accuracy",
+      "measured": "4.0000",
+      "pass": true
+    },
+    {
+      "test": "T6a: Shot noise mean preserved",
+      "measured": "rel_err=0.0004",
+      "pass": true
+    },
+    {
+      "test": "T6b: Shot noise variance ~ expected",
+      "measured": "noise_var=0.002880, expected=0.002944, ratio=0.978",
+      "pass": true
+    },
+    {
+      "test": "T7: PSF preserves mean (interior)",
+      "measured": "rel_err=0.00000",
+      "pass": true
+    },
+    {
+      "test": "T8a: 16-bit dtype",
+      "pass": true
+    },
+    {
+      "test": "T8b: Value range [0,65535]",
+      "pass": true
+    },
+    {
+      "test": "T9: Edge brightening on dense lines",
+      "pass": true
+    },
+    {
+      "test": "T10: CD accuracy (40nm iso_line)",
+      "measured_cd": "40.0nm",
+      "error": "0.0nm",
+      "pass": true
+    }
+  ]
+}

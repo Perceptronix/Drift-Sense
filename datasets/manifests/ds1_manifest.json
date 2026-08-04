@@ -1,0 +1,32 @@
+{
+  "$comment": "DS1 Development sample-plan manifest (TEMPLATE). Populated by the simulator at generation time from generation_configs/ds1_development.yml + master_seed=1001. One entry per sample; deterministic.",
+  "dataset": "ds1_development",
+  "dataset_version": "1.0.0",
+  "master_seed": 1001,
+  "schema_version": "1.0",
+  "n_samples": 50,
+  "sample_plan_hash": "<SHA-256 of canonical plan — computed at generation>",
+  "samples": [
+    {
+      "sample_index": 0,
+      "structure_type": "iso_line",
+      "parameters": {
+        "cd_nm": 30.0,
+        "height_nm": 50.0,
+        "pitch_nm": null
+      },
+      "variability": {
+        "ler_3sigma_nm": 0.5,
+        "ler_xi_nm": 20.0,
+        "overlay_nm": 0.0,
+        "cdu_sigma_nm": 0.0
+      },
+      "physics": {
+        "beam_energy_keV": 1.0,
+        "probe_current_pA": 50.0,
+        "probe_diameter_nm": 3.0
+      },
+      "sample_seed": "<derive(1001, ds1_development, 0)>"
+    }
+  ]
+}

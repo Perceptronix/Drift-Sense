@@ -1,0 +1,19 @@
+{
+  "$comment": "DS1 dataset-level metadata record (TEMPLATE). Populated at generation time.",
+  "dataset": "ds1_development",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0",
+  "purpose": "development smoke tests, module debugging",
+  "n_samples": 50,
+  "structure_distribution": { "uniform": "5 per structure type" },
+  "parameter_coverage": "nominal mid-range",
+  "master_seed": 1001,
+  "image_size": [1024, 1024],
+  "pixel_size_nm": 1.0,
+  "ground_truth": "full",
+  "validation_gates": ["L1", "L2"],
+  "expected_size_mb": 200,
+  "status": "NOT_YET_GENERATED",
+  "generation_date": null,
+  "release_criteria_met": false
+}

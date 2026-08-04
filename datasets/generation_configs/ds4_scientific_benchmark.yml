@@ -1,0 +1,69 @@
+# DS4 Scientific-Benchmark Dataset — Generation Config
+# Purpose: L4 scientific validation, physics accuracy vs published values
+# Version: 1.0.0 | Master seed: 4004 | Size: 200 @1024x1024
+# Frozen: Phase 5.5, Document 05
+
+dataset:
+  name: ds4_scientific_benchmark
+  version: 1.0.0
+  mode: batch
+  n_samples: 200
+  master_seed: 4004
+  license: "CC BY 4.0"
+
+image:
+  width: 1024
+  height: 1024
+  pixel_size_nm: 1.0
+  bit_depth: 16
+
+structure_distribution:            # uniform: 20 per structure type
+  iso_line: 20
+  dense_ls: 20
+  contact: 20
+  via: 20
+  trench: 20
+  fin: 20
+  gate: 20
+  sti: 20
+  bimaterial: 20
+  pitch_std: 20
+
+materials:
+  # explicit multi-material calibration stacks
+  - "Si-only"
+  - "Si-SiO2-SiN"
+  - "Si-Cu"
+  - "Si-W"
+  - "PR-on-Si"
+
+parameter_ranges:                  # calibration set with known analytic results
+  cd_nm: [20, 30, 40, 50, 60]
+  height_nm: [50, 80, 100]
+  pitch_nm: [60, 100, 150]
+
+variability:
+  ler_3sigma_nm: [0.0, 1.0, 3.0]
+  ler_xi_nm: [20, 50]
+  overlay_nm: [0.0, 1.0]
+  cdu_sigma_nm: [0.0]
+
+physics:
+  beam_energy_keV: [0.3, 1.0, 3.0, 5.0, 10.0, 30.0]
+  probe_current_pA: [10.0, 50.0, 100.0]
+  probe_diameter_nm: [1.0, 3.0, 5.0]
+  noise_enabled: [true, false]     # noise-off used for calibration
+  charging_enabled: false
+
+ground_truth: true
+artifacts: [image, ground_truth, config, metadata, yield_maps]
+
+validation_gates: [L1, L2, L3, L4]
+release_criteria:
+  - "Si SE yield in [0.4, 0.8] at 1 keV"
+  - "Si BSE yield in [0.15, 0.25]"
+  - "material contrast ordering verified"
+  - "CD accuracy within 0.1 nm"
+  - "PSF width within 1%"
+
+expected_size: "~1 GB (includes yield maps)"

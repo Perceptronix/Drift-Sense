@@ -1,0 +1,67 @@
+# DS1 Development Dataset — Generation Config
+# Purpose: development smoke tests, module debugging, fast iteration
+# Version: 1.0.0 | Master seed: 1001 | Size: 50
+# Frozen: Phase 5.5, Document 05
+
+dataset:
+  name: ds1_development
+  version: 1.0.0
+  mode: batch
+  n_samples: 50
+  master_seed: 1001
+  license: "CC BY 4.0"
+
+image:
+  width: 1024
+  height: 1024
+  pixel_size_nm: 1.0
+  bit_depth: 16
+
+structure_distribution:            # uniform: 5 per structure type
+  iso_line: 5
+  dense_ls: 5
+  contact: 5
+  via: 5
+  trench: 5
+  fin: 5
+  gate: 5
+  sti: 5
+  bimaterial: 5
+  pitch_std: 5
+
+materials:
+  - 1 # Si
+  - 2 # SiO2
+  - 3 # SiN
+  - 4 # Cu
+  - 5 # W
+  - 6 # PR
+
+parameter_ranges:                  # nominal mid-range values
+  cd_nm: [30, 60]
+  height_nm: [50, 100]
+  pitch_nm: [60, 150]
+
+variability:
+  ler_3sigma_nm: [0.5, 2.0]
+  ler_xi_nm: [20, 50]
+  overlay_nm: [0.0, 2.0]
+  cdu_sigma_nm: [0.0, 1.0]
+
+physics:
+  beam_energy_keV: [1.0]
+  probe_current_pA: [50.0]
+  probe_diameter_nm: [3.0]
+  noise_enabled: true
+  charging_enabled: false
+
+ground_truth: true
+artifacts: [image, ground_truth, config, metadata]
+
+validation_gates: [L1, L2]
+release_criteria:
+  - "all 50 samples valid"
+  - "dataset_index.json consistent"
+  - "determinism spot-check passes"
+
+expected_size: "~200 MB"
