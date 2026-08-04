@@ -30,7 +30,7 @@
 
 ## 1. Project Overview
 
-The **SEMICON 2026 Synthetic SEM Image Generator** is a production-grade, physics-based simulation system that synthesizes realistic Scanning Electron Microscope (SEM) images of semiconductor structures — DRAM arrays and FinFET logic — together with pixel-accurate ground truth and full scientific metadata.
+The **SEMICON 2026 Synthetic SEM Image Generator** is a production-grade, physics-based simulation system that synthesizes realistic Scanning Electron Microscope (SEM) images of semiconductor structures — DRAM arrays and FinFET logic — together with pixel-accurate ground truth and full scientific metadata with proper image datasets in hugging face.
 
 It was developed through **21 research phases** (210+ documents) that froze the physics, geometry, architecture, and dataset specifications before a single line of implementation code was written. The result is a simulator that is:
 
