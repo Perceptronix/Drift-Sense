@@ -1,0 +1,68 @@
+# DS3 Validation Dataset — Generation Config
+# Purpose: milestone gates L1-L5, cross-module consistency
+# Version: 1.0.0 | Master seed: 3003 | Size: 1,000 @1024x1024
+# Frozen: Phase 5.5, Document 05
+
+dataset:
+  name: ds3_validation
+  version: 1.0.0
+  mode: sweep
+  n_samples: 1000
+  master_seed: 3003
+  license: "CC BY 4.0"
+
+image:
+  width: 1024
+  height: 1024
+  pixel_size_nm: 1.0
+  bit_depth: 16
+
+structure_distribution:            # stratified: 100 per structure type
+  iso_line: 100
+  dense_ls: 100
+  contact: 100
+  via: 100
+  trench: 100
+  fin: 100
+  gate: 100
+  sti: 100
+  bimaterial: 100
+  pitch_std: 100
+
+materials:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+
+parameter_ranges:                  # full certified ranges, stratified
+  cd_nm: [10, 500]                 # uniform log coverage
+  height_nm: [20, 200]
+  pitch_nm: [20, 1000]
+  sampling: stratified             # per-decile coverage
+
+variability:
+  ler_3sigma_nm: [0.0, 5.0]
+  ler_xi_nm: [5, 100]
+  overlay_nm: [0.0, 10.0]
+  cdu_sigma_nm: [0.0, 2.0]
+
+physics:
+  beam_energy_keV: [0.3, 30.0]
+  probe_current_pA: [1.0, 1000.0]
+  probe_diameter_nm: [0.5, 10.0]
+  noise_enabled: true
+  charging_enabled: [false, true]  # isolated structures only
+
+ground_truth: true
+artifacts: [image, ground_truth, config, metadata, height_field]
+
+validation_gates: [L1, L2, L3, L5]
+release_criteria:
+  - "all L1-L5 validation pass"
+  - "dataset statistics report produced"
+  - "cross-module invariants verified"
+
+expected_size: "~4 GB"

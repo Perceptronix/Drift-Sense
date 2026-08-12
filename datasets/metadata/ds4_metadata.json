@@ -1,0 +1,20 @@
+{
+  "$comment": "DS4 dataset-level metadata record (TEMPLATE). Populated at generation time.",
+  "dataset": "ds4_scientific_benchmark",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0",
+  "purpose": "L4 scientific validation, physics accuracy vs published values",
+  "n_samples": 200,
+  "structure_distribution": { "uniform": "20 per structure type" },
+  "parameter_coverage": "calibration set (known analytic results)",
+  "master_seed": 4004,
+  "image_size": [1024, 1024],
+  "pixel_size_nm": 1.0,
+  "ground_truth": "full",
+  "artifacts_extra": ["yield_maps"],
+  "validation_gates": ["L1", "L2", "L3", "L4"],
+  "expected_size_gb": 1,
+  "status": "NOT_YET_GENERATED",
+  "generation_date": null,
+  "release_criteria_met": false
+}

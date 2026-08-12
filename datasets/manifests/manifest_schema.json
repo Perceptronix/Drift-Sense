@@ -1,0 +1,62 @@
+{
+  "$comment": "Canonical sample-plan manifest schema (Phase 5.4 doc 04; Phase 5.5 doc 05). Applies to DS1-DS5 manifests. Generated deterministically from dataset config + master_seed.",
+  "type": "object",
+  "required": [
+    "dataset",
+    "dataset_version",
+    "master_seed",
+    "schema_version",
+    "n_samples",
+    "sample_plan_hash",
+    "samples"
+  ],
+  "properties": {
+    "dataset": { "type": "string" },
+    "dataset_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "master_seed": { "type": "integer", "minimum": 1 },
+    "schema_version": { "type": "string" },
+    "n_samples": { "type": "integer", "minimum": 1 },
+    "sample_plan_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "samples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["sample_index", "structure_type", "parameters", "sample_seed"],
+        "properties": {
+          "sample_index": { "type": "integer", "minimum": 0 },
+          "structure_type": {
+            "type": "string",
+            "enum": ["iso_line", "dense_ls", "contact", "via", "trench", "fin", "gate", "sti", "bimaterial", "pitch_std"]
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "cd_nm": { "type": "number", "minimum": 10, "maximum": 500 },
+              "height_nm": { "type": "number", "minimum": 20, "maximum": 200 },
+              "pitch_nm": { "type": ["number", "null"], "minimum": 20, "maximum": 1000 }
+            }
+          },
+          "variability": {
+            "type": "object",
+            "properties": {
+              "ler_3sigma_nm": { "type": "number", "minimum": 0, "maximum": 5 },
+              "ler_xi_nm": { "type": "number", "minimum": 5, "maximum": 100 },
+              "overlay_nm": { "type": "number", "minimum": 0, "maximum": 10 },
+              "cdu_sigma_nm": { "type": "number", "minimum": 0, "maximum": 2 }
+            }
+          },
+          "physics": {
+            "type": "object",
+            "properties": {
+              "beam_energy_keV": { "type": "number", "minimum": 0.3, "maximum": 30 },
+              "probe_current_pA": { "type": "number", "minimum": 1, "maximum": 1000 },
+              "probe_diameter_nm": { "type": "number", "minimum": 0.5, "maximum": 10 }
+            }
+          },
+          "sample_seed": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+# Material property library (Phase 5.3 doc 05 calibration values).
+# delta0 = normal-incidence SE yield at the calibrated beam energy.
+# eta is computed from Z via the Everhart polynomial (not set here).
+
+materials:
+  - id: 0
+    name: vacuum
+    z: 0.0
+    delta0: 0.0
+    lambda_nm: 0.0
+    tilt_exp: 1.0
+    g_bulk: 0.0
+  - id: 1
+    name: Si
+    z: 14.0
+    delta0: 0.50
+    lambda_nm: 2.5
+    tilt_exp: 1.0
+    g_bulk: 0.5
+  - id: 2
+    name: SiO2
+    z: 10.8
+    delta0: 0.60
+    lambda_nm: 2.8
+    tilt_exp: 1.0
+    g_bulk: 0.5
+  - id: 3
+    name: SiN
+    z: 10.4
+    delta0: 0.52
+    lambda_nm: 2.6
+    tilt_exp: 1.0
+    g_bulk: 0.5
+  - id: 4
+    name: Cu
+    z: 29.0
+    delta0: 0.40
+    lambda_nm: 1.8
+    tilt_exp: 1.0
+    g_bulk: 0.5
+  - id: 5
+    name: W
+    z: 74.0
+    delta0: 0.35
+    lambda_nm: 1.5
+    tilt_exp: 1.0
+    g_bulk: 0.5
+  - id: 6
+    name: PR
+    z: 5.0
+    delta0: 0.80
+    lambda_nm: 4.0
+    tilt_exp: 1.0
+    g_bulk: 0.5

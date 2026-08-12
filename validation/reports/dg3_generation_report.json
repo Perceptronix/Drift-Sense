@@ -1,0 +1,31 @@
+{
+  "datasets": [
+    {
+      "name": "ds2_unit_test",
+      "n_total": 100,
+      "n_ok": 100,
+      "n_failed": 0,
+      "time_s": 34.7,
+      "time_per_image_s": 0.347,
+      "seed": 2002
+    },
+    {
+      "name": "ds3_validation",
+      "n_total": 1000,
+      "n_ok": 1000,
+      "n_failed": 0,
+      "time_s": 339.2,
+      "time_per_image_s": 0.339,
+      "seed": 3003
+    },
+    {
+      "name": "ds4_scientific_benchmark",
+      "n_total": 200,
+      "n_ok": 200,
+      "n_failed": 0,
+      "time_s": 67.4,
+      "time_per_image_s": 0.337,
+      "seed": 4004
+    }
+  ]
+}

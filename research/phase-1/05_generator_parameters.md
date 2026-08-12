@@ -1,0 +1,81 @@
+# 05 — Generator Parameters
+
+Every parameter a future procedural layout generator needs, derived from literature and the problem statement `[PS-DriftSense]`. Format per parameter: **Name, Description, Typical Value, Typical Range, Unit, Why it matters, Supporting references**. No implementation code — this is a specification, not code (per project constraints).
+
+Citation keys resolve in [09_complete_reference_list.md](09_complete_reference_list.md). Where fewer than 2 independent references support a value, it is explicitly flagged.
+
+---
+
+## 0. Global / imaging-geometry parameters (fixed by the problem statement, not literature — architecture-independent)
+
+These are **not** derived from semiconductor literature; they are **mandated by the hackathon problem statement** itself and must be treated as fixed contract, not randomizable content.
+
+| Parameter | Description | Value | Unit | Why it matters | Source |
+|---|---|---|---|---|---|
+| `reference_image_size` | Pixel dimensions of the high-resolution (100x) reference image | 1000 × 1000 | pixels | Fixed I/O contract for the localization algorithm | `[PS-DriftSense]` |
+| `search_image_size` | Pixel dimensions of the low-resolution (10x) wide-search image | 1000 × 1000 | pixels | Fixed I/O contract; same pixel count as reference despite 10x larger FOV — this is *the* source of the scale disparity | `[PS-DriftSense]` |
+| `reference_pixel_size` | Physical size represented by one reference-image pixel | 1 | nm/pixel | Defines reference field of view (1000 px × 1 nm = 1 µm) | `[PS-DriftSense]` |
+| `search_pixel_size` | Physical size represented by one search-image pixel | 10 | nm/pixel | Defines search field of view (1000 px × 10 nm = 10 µm); exactly 10× the reference pixel size | `[PS-DriftSense]` |
+| `reference_fov` | Physical field of view of the reference image | 1 × 1 | µm × µm | The "needle" — what must be found | `[PS-DriftSense]` |
+| `search_fov` | Physical field of view of the search image | 10 × 10 | µm × µm | The "haystack" — 100× the reference *area*, 10× the reference *linear* extent | `[PS-DriftSense]` |
+| `scale_ratio` | Linear scale disparity between search and reference | 10 | dimensionless (×) | The defining constraint of the entire task — every synthetic layout must be generated once at a shared physical scale and then sampled twice (once at 1 nm/px into the reference crop, once at 10 nm/px into the full search image) so the two images are provably the same underlying physical layout at two resolutions | `[PS-DriftSense]` |
+| `ground_truth_center_offset (x, y)` | Physical/pixel location of the reference pattern's center within the search image | N/A (label, not an input) | pixels (search-image coordinates) | The label the localization algorithm must recover; must be stored with sub-pixel precision at generation time since it is produced analytically (by construction), not measured | `[PS-DriftSense]`, `[SEM-Dataset-Survey]` (Stage 2 "Scale Disparity Cropping" workflow) |
+
+**[Fact]** Because reference and search images share pixel count but differ 10× in physical FOV, the areal coverage ratio is 100× `[PS-DriftSense]`. **[Inference]** This means the generator's single most important architectural requirement is *not* any specific semiconductor geometry parameter — it is the ability to render **one continuous physical layout at two different, exactly-related sampling densities** without introducing any inconsistency between the two renders (no independent randomization of layout content between reference and search — only independent randomization of *noise*, per the problem statement's explicit instruction that reference and search noise must NOT be reused between the two images `[PS-DriftSense]`, Section "Sample Prompt to Generate data").
+
+---
+
+## 1. DRAM generator parameters
+
+| Parameter | Description | Typical Value | Typical Range | Unit | Why it matters | Supporting references |
+|---|---|---|---|---|---|---|
+| `F` (half-pitch / feature size) | Fundamental DRAM lithographic unit; all other DRAM dimensions are expressed as multiples of F | 15 | 10–19 (modern "10 nm-class," 1x–1γ generations); up to ~35–40 for older/coarser illustrative nodes | nm | Sets the absolute scale of every other DRAM parameter; directly controls how many unit cells fit in the fixed 1 µm reference FOV, which in turn controls apparent pattern density and difficulty | `[Micron-1alpha-Product]`, `[Micron-1alpha-Blog]`, cross-checked against absolute cell-area data in `[SEM-Dataset-Survey]` |
+| `word_line_pitch` | Center-to-center spacing of horizontal word lines | 3F | 3F (fixed ratio; only F varies) | nm (=3×F) | Sets vertical repeat period of the array grid | `[US7349232B2]`, `[US20060281250A1]`, `[Orthogonal-6F2-Trench]` |
+| `bit_line_pitch` | Center-to-center spacing of vertical bit lines | 2F | 2F (fixed ratio; only F varies) | nm (=2×F) | Sets horizontal repeat period of the array grid | `[US7349232B2]`, `[US20060281250A1]` |
+| `word_line_width` | Drawn line width of a word line | ~0.4–0.5 × pitch | 0.35–0.6 × word_line_pitch | nm | Controls line/space duty cycle — a key visual feature (thin bright lines vs. thick bright lines on dark background, or vice versa in inverted-contrast SEM) | **[Inference, not directly quantified in surveyed literature]** — standard lithographic practice targets roughly equal line and space widths at minimum pitch; flagged in [08_open_questions.md](08_open_questions.md) as needing direct confirmation from a CD-focused paper |
+| `bit_line_width` | Drawn line width of a bit line | ~0.4–0.5 × pitch | 0.35–0.6 × bit_line_pitch | nm | Same rationale as word_line_width | Same as above — **[Inference]**, flagged |
+| `active_area_tilt_angle` | Angle of the diagonal active-area stripe relative to the bit-line axis | 60 | 20–80 (patent-claim range) | degrees | Determines the diagonal visual signature unique to 6F² DRAM; must be consistent with the requirement that each AA stripe cross exactly 1 bit line and 2 word lines | `[US20060281250A1]` (single-source patent claim range — **flagged as needing independent corroboration**, see [08_open_questions.md](08_open_questions.md)) |
+| `active_area_width` | Width of the diagonal diffusion stripe | ~1F | 0.8–1.2F | nm | Controls diagonal-stripe visual thickness | **[Inference]** — derived from the general rule that AA width is set at the process minimum feature size (F) in dense-array regions; not independently quantified in a surveyed source, flagged |
+| `contact_diameter` | Diameter of bit-line contact (BLC) or storage-node contact (SNC) | ~0.6F | 0.4–0.8F | nm | Sets dot size of the periodic contact lattice — the primary local landmark feature discussed in Section 6/7 of `02_dram_research.md` | **[Inference]** — general lithographic practice (contact CD is typically a fraction of pitch, sub-F at advanced nodes); not independently numerically quantified in the surveyed literature — flagged |
+| `landing_pad_diameter` | Diameter/extent of the storage-node landing pad (SNLP), when modeled as a distinct larger layer above the raw contact | ~0.9F | 0.7–1.1F | nm | SNLP is deliberately enlarged vs. the raw contact to relax overlay tolerance; often the visually dominant dot feature in a top-down SEM crop | `[DRAM-EUV-SNLP-Patterning]`, `[US2021320106-SNLP-Airgap]` |
+| `cell_area` | Derived: area of one unit cell | 6F² | 6F² (6F² architecture is the recommended default; see `[04_comparison.md]`) | nm² | Directly determines how many complete unit cells fit inside the fixed reference/search FOVs — the single biggest driver of apparent pattern density | `[US7349232B2]`, `[EDN-8F2vs6F2]`, cross-node absolute values (0.028 µm² @ 68 nm design rule; 0.013 µm² @ 46 nm bWL) via `[SEM-Dataset-Survey]` |
+| `array_mat_size` | Number of unit cells before a deliberate symmetry break (mat boundary, redundancy row/column) | Large — mat boundaries do not need to appear inside a 1–10 µm crop | N/A at this crop scale; only relevant if the generator wants to model a rare boundary-crossing case | unit cells | Controls whether/how often the "escape hatch" of a non-periodic landmark appears inside a given crop — directly affects task difficulty | `[Kwon-Thesis-UCBerkeley]` (**[Inference]** — exact typical mat sizes were not found in the surveyed literature; flagged as an open question) |
+
+---
+
+## 2. FinFET generator parameters
+
+| Parameter | Description | Typical Value | Typical Range | Unit | Why it matters | Supporting references |
+|---|---|---|---|---|---|---|
+| `fin_pitch` | Center-to-center spacing of parallel fins | 30 | 25–45 (spanning 7 nm-class to 14 nm-class literature values); up to ~90 for illustrative coarser/older nodes | nm | Sets the fin-direction repeat period; single biggest driver of "how many fins fit in the reference FOV" | `[FinFET-CGP-DRC2017]`, `[Intel-Bohr-14nm-IDF2014]` (Intel 22 nm: fin pitch = 42 nm), `[WikiChip-TSMC5nm]` (TSMC 5 nm: ~25–28 nm) |
+| `fin_width` | Drawn width of an individual fin | 6 | 5–10 | nm | Controls line thickness of the fin family; near the reported physical minimum (~5–6 nm) at advanced nodes | `[FinFET-CGP-DRC2017]` (7 nm-class projection: 5–6 nm) — **single literature family; corroborating source not independently found, flagged** |
+| `fin_length` (per active segment) | Length of a continuous fin run between gate-defined cuts | Variable — spans multiple standard cells unless cut | 200–2000+ | nm | Determines how much of a tile is "plain fin" (low-information, ambiguous) vs. near a cut (higher information) | **[Inference]**, general layout practice; not independently quantified numerically in surveyed literature — flagged |
+| `gate_pitch` / CPP | Center-to-center spacing of gate lines (contacted poly/gate pitch) | 48 | 36–72 (spanning 14 nm-class down to 7 nm-class) | nm | Sets the gate-direction repeat period; together with fin_pitch determines standard-cell area (CPP × MP metric) | `[FinFET-CGP-DRC2017]` (14 nm: 72 nm; 10 nm: 64 nm; 7 nm: 44–48 nm) |
+| `gate_length` | Drawn/effective gate length (the narrow dimension of the gate line at the fin) | 16 | 12–34 | nm | Always substantially smaller than CPP; controls apparent gate-line thinness relative to its pitch | `[FinFET-CGP-DRC2017]` (12–14 nm range projected at 7/5 nm), `[Intel22nm-IEDM2012]` (30/34 nm at 22 nm), `[WikiChip-TSMC5nm]` (~16.5 nm effective at TSMC 7 nm) |
+| `gate_width` (line width in the fin direction, i.e. how "thick" the horizontal bar looks) | Drawn width of the gate line as rendered crossing the fins | ≈ gate_length (top-down, gate width ≈ gate length since gate length *is* the top-down drawn width of the gate line) | 12–34 | nm | Same driver as gate_length — for a top-down 2D generator, gate_length and the visual "bar thickness" are effectively the same parameter | Same as `gate_length` row |
+| `fin_height` | Vertical (out-of-plane) fin height | 42 (22 nm gen.) trending toward similar-or-taller at advanced nodes | 30–50 | nm | **Not directly visible in a top-down 2D render** — included for completeness/documentation and for any future 3D-shading extension, but not a first-order 2D generator parameter | `[Intel-Bohr-14nm-IDF2014]`, `[RealWorldTech-Intel22nm]` |
+| `num_gate_bars` | Number of horizontal gate bars crossing the fin field within a reference tile | 1–2 (per problem statement's own sample prompt) | 1–4 (for a 1 µm tile at CPP ≈ 36–72 nm, a 1 µm tile can contain roughly 14–28 gate crossings if not cropped to a single-cell view — the "1 or 2" simplification implies the reference tile is deliberately cropped to a *sub-cell* or *single-row* view) | count | Directly controls how much disambiguating (non-fin-parallel) structure appears in a tile — the single biggest lever on localization difficulty for FinFET, per Section 7 of `03_finfet_research.md` | `[PS-DriftSense]` (explicit "one or two horizontal gate bars" in the sample prompt), `[ASAP7-2016]` (standard-cell track-height context for what a realistic sub-crop looks like) |
+| `fin_cut_probability` | Probability that any given fin is cut/depopulated within a rendered region | 0.1–0.3 (sparse, matching real standard-cell layouts) | 0–0.5 | probability | Controls density of the one class of local landmark that breaks fin-axis translational ambiguity | **[Inference]** from general standard-cell design practice (`[US9337099-FinFET-NonUniform]`, `[ASAP7-2016]`); no directly quantified "typical fin-cut density" statistic found in surveyed literature — flagged as needing further sourcing |
+| `gate_cut_probability` | Probability that a given gate line is cut between adjacent standard cells | Occurs at most/all standard-cell boundaries | N/A — deterministic at cell boundaries in real layouts, but for a simplified generator this can be treated as a low-probability random event within a single rendered "row" | probability | Same rationale as fin_cut_probability | `[US9337099-FinFET-NonUniform]` |
+| `standard_cell_area` (derived) | CPP × MP-scale product describing the smallest repeatable logic tile area | Node-dependent; 14 nm-class ~72 nm × 48 nm ≈ 3456 nm²; 7 nm-class ~44 nm × 36 nm ≈ 1584 nm² | — | nm² | Analogous role to DRAM's `cell_area` — governs how many "logic tiles" fit in the fixed FOV | `[FinFET-CGP-DRC2017]` |
+
+---
+
+## 3. Shared / cross-architecture parameters
+
+| Parameter | Description | Typical Value | Typical Range | Unit | Why it matters | Supporting references |
+|---|---|---|---|---|---|---|
+| `line_orientation_offset` | Small deliberate rotation of the entire layout grid relative to the image axes | 0 | 0–5 (small realistic misalignment from stage/wafer-notch rotation) or 0–90 (if testing full rotational robustness — flagged as a design choice, see [06_randomization_strategy.md](06_randomization_strategy.md)) | degrees | Real dies are not always perfectly axis-aligned to the SEM raster in field data; also affects whether an algorithm can rely on axis-aligned priors | **[Inference]** — no literature source directly quantifies typical stage-to-die rotational misalignment; flagged as an open question requiring either an SEM-tool-alignment-tolerance source or a deliberate engineering choice documented as such |
+| `crop_origin (x, y)` | Location within the large synthesized layout where the 1 µm reference window is cropped | Random, uniform over valid interior region | Full valid range (must avoid layout edges/undefined regions) | nm (physical layout coordinates) | This IS the ground-truth label generator — must be tracked precisely and propagated to both reference crop and search-image placement | `[SEM-Dataset-Survey]` (Stage 2 workflow), `[PS-DriftSense]` |
+| `pattern_phase_alignment` | Sub-cell offset of the periodic pattern relative to the crop window | Random, uniform over one full unit-cell period | 0 to 1 unit cell in each axis | fraction of unit cell | Ensures the reference tile does not always start at a "canonical" cell-aligned position — critical for preventing the generator from leaking an easy shortcut (e.g., "reference always starts at a WL/BL intersection") | **[Inference]**, standard good-practice reasoning; not literature-sourced (this is a dataset-design principle, not a semiconductor-physics fact) — appropriately categorized as **[Recommendation]** rather than [Fact] |
+
+---
+
+## 4. Parameters explicitly deferred to later phases (out of scope here, flagged for traceability)
+
+Per task instructions, this phase studies **geometry only** — the following parameter families are real, literature-grounded, and will matter for later synthetic-SEM-rendering phases, but are **not** detailed here:
+
+- SEM noise model parameters (Poisson shot-noise statistics, secondary-electron yield curves, edge-blooming kernel shape) — see `[NIST-Charging-SPIE]`, `[arXiv-BeamCrossSections-2025]`, `[arXiv-ShotNoiseICAM-2023]`, `[NatSciRep-SEMDenoising2025]`, `[NIST-DetectionLimitsSEM-2025]` for the relevant literature family, to be revisited in the phase that designs the SEM rendering/noise pipeline.
+- Contrast inversion, surface charging drift, and beam-landing-energy parameters — same deferral, same source family.
+
+These are listed here only so the reference list and future phases can trace back to where this boundary was drawn — see [08_open_questions.md](08_open_questions.md), item on scope boundary.

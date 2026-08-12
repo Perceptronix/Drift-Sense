@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "label": "DS1: 50 images generated",
+      "passed": true
+    },
+    {
+      "label": "DS1: metadata complete",
+      "passed": true
+    },
+    {
+      "label": "DS1: ground truth complete",
+      "passed": true
+    },
+    {
+      "label": "DS1: structure balance",
+      "passed": true
+    },
+    {
+      "label": "DS1: checksums verified",
+      "passed": true
+    },
+    {
+      "label": "Determinism: bit-identical images",
+      "passed": true
+    },
+    {
+      "label": "Determinism: identical metadata",
+      "passed": true
+    },
+    {
+      "label": "Different seed \u2192 different output",
+      "passed": true
+    },
+    {
+      "label": "Performance: per_image \u2264 3.0s",
+      "passed": false
+    },
+    {
+      "label": "Performance: 4-worker speedup \u2265 3.5x",
+      "passed": false
+    }
+  ],
+  "all_passed": false
+}

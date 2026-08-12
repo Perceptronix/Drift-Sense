@@ -1,0 +1,181 @@
+# Repository Structure
+
+**Research Phase:** 5.2
+**Document:** 05_repository_structure.md
+**Date:** 2026-07-30
+
+---
+
+## 1. Geometry Engine Source Tree
+
+```
+src/semicon/geometry/
+│
+├── __init__.py                     ← Public API re-exports
+│
+├── raster.py                       ← PUBLIC geo_raster (M1, I1 producer)
+│
+├── _raster/                        ← geo_raster internals (private package)
+│   ├── __init__.py
+│   ├── gdsii_reader.py             ← GDSII parsing + flattening (gdspy wrapper)
+│   ├── polygon_rasterizer.py       ← Edge-function supersampling fill
+│   └── mask_builder.py             ← FOV, threshold, I1 validation
+│
+├── process.py                      ← PUBLIC geo_process (M2, I2 producer)
+│
+├── _process/                       ← geo_process internals
+│   ├── __init__.py
+│   ├── layer_stack.py              ← ProcessPlan resolution
+│   ├── deposition.py               ← Conformal/PVD/isoptropic deposition
+│   ├── lithography.py              ← Patterning, CD bias, resist
+│   ├── etch.py                     ← Anisotropic/isotropic etch, sidewall
+│   ├── cmp.py                      ← Planarization
+│   ├── corner_rounding.py          ← Fillet application
+│   └── heightfield_gen.py          ← Plan execution + I2 assembly
+│
+├── variability.py                  ← PUBLIC geo_variability (M3, I3 producer)
+│
+└── _variability/                   ← geo_variability internals
+    ├── __init__.py
+    ├── edge_detector.py            ← Gradient edge localization
+    ├── ler_generator.py            ← Spectral-synthesis LER
+    ├── overlay_engine.py           ← Translational shift
+    ├── cdu_engine.py               ← CD distribution sampling
+    └── variability_applier.py      ← Ordering + I3 assembly
+```
+
+---
+
+## 2. Public vs Internal API Policy
+
+| Level | Convention | Access Rule |
+|---|---|---|
+| **Public** | `semicon.geometry.raster`, `.process`, `.variability` | Stable API — follows Phase 4.2 contracts. Exported in `geometry/__init__.py` |
+| **Internal** | `semicon.geometry._raster.*`, `._process.*`, `._variability.*` | Private (leading underscore). May change without notice. Not exported |
+
+### Public API Surface (frozen)
+
+```
+semicon.geometry.raster.rasterize(gdsii_path, layer, M, N, pixel_size_nm, center=None) → PixelMask
+semicon.geometry.process.build_geometry(pixel_mask, layer_stack, config) → HeightField, MaterialMap
+semicon.geometry.variability.apply_variability(height_field, material_map, config, seed) → HeightField, MaterialMap, VariabilityRecord
+```
+
+All return **dataclass objects** from `semicon.foundation` data-object module (Phase 4.2, D3–D6): `PixelMask`, `LayerStack`, `HeightField`, `MaterialMap`.
+
+### Internal API Example
+
+```
+_raster.polygon_rasterizer.rasterize_polygons(polygons_nm, shape, pixel_size_nm, origin_nm) → np.ndarray[float32]
+_raster.gdsii_reader.read_layer(gdsii_path, layer) → list[Polygon]
+_raster.mask_builder.build(polygons, shape, pixel_size_nm, ...) → PixelMask
+```
+
+---
+
+## 3. Data Object Module (Foundation)
+
+```
+src/semicon/foundation/
+├── __init__.py
+├── datatypes.py          ← PixelMask, LayerStack, HeightField, MaterialMap dataclasses
+├── math_utils.py         ← Convolution, gradients, distance helpers
+├── rng_utils.py          ← Seed manager + Gaussian random field
+├── image_io.py           ← TIFF/PNG I/O
+└── units.py              ← Physical constants + conversion
+```
+
+**Implementation decision:** The four geometry data objects live in `foundation.datatypes` (single source of truth for Phase 4.2 object definitions), imported by geometry, physics, and dataset layers.
+
+---
+
+## 4. Test Tree
+
+```
+tests/
+├── conftest.py                       ← Shared fixtures (test GDSII, golden references)
+├── unit/
+│   └── geometry/
+│       ├── test_gdsii_reader.py
+│       ├── test_polygon_rasterizer.py
+│       ├── test_mask_builder.py
+│       ├── test_layer_stack.py
+│       ├── test_deposition.py
+│       ├── test_lithography.py
+│       ├── test_etch.py
+│       ├── test_cmp.py
+│       ├── test_corner_rounding.py
+│       ├── test_heightfield_gen.py
+│       ├── test_edge_detector.py
+│       ├── test_ler_generator.py
+│       ├── test_overlay_engine.py
+│       ├── test_cdu_engine.py
+│       └── test_variability_applier.py
+├── module/
+│   └── test_geometry_modules.py      ← L1: public module contracts
+├── interface/
+│   └── test_i1_i2_i3.py              ← L2: interface pairs
+├── pipeline/
+│   └── test_geometry_e2e.py          ← L3: GDSII → HeightField_var
+├── scientific/
+│   └── test_geometry_scientific.py   ← L4: LER stats, CD accuracy
+└── data/
+    ├── test_gdsii/                   ← .gds fixture files
+    ├── reference/                    ← golden .npy height fields
+    ├── reference_hashes.json         ← regression hashes
+    └── structure_params.yml          ← structure library fixtures
+```
+
+---
+
+## 5. Golden Reference Data
+
+| Fixture | Purpose | Generated By |
+|---|---|---|
+| `line_30nm_50nm.gds` | Single isolated line | Manual GDSII (gdspy) |
+| `dense_ls_30p60.gds` | Dense line/space array | Manual GDSII |
+| `contact_40nm.gds` | Contact hole array | Manual GDSII |
+| `via_chain.gds` | Via chains | Manual GDSII |
+| `trench_20nm.gds` | Trench | Manual GDSII |
+| `fin_10nm.gds` | FinFET fin | Manual GDSII |
+| `gate_stack.gds` | Gate over fins | Manual GDSII |
+| `sti_iso.gds` | STI isolation | Manual GDSII |
+| `bimaterial.gds` | Material boundary | Manual GDSII |
+| `pitch_std.gds` | Pitch standard | Manual GDSII |
+
+Each fixture has a matching golden output: `line_30nm_50nm_height.npy`, `..._material.npy`. Golden hashes recorded in `reference_hashes.json`.
+
+---
+
+## 6. File Organization Rules
+
+| Rule | Description |
+|---|---|
+| One internal responsibility per file | No "utils.py" dumping grounds |
+| Internal packages use underscore prefix | `_raster`, `_process`, `_variability` |
+| Public modules expose exactly the interface functions | No extra public symbols |
+| All functions typed | mypy --strict compliant |
+| NumPy docstrings on all public functions | Sphinx-documented |
+| Constants colocated with their module | Material IDs in foundation.datatypes |
+
+---
+
+## 7. Module Import Dependencies (Forbidden Cycles)
+
+```
+foundation ← geometry._raster ← geometry.raster
+foundation ← geometry._process ← geometry.process
+foundation + geometry._raster + geometry._process ← geometry._variability ← geometry.variability
+geometry ← physics (I4 consumer imports geometry data objects only)
+```
+
+**Rule:** Geometry modules never import from `physics`, `dataset`, or `orchestration`. Physics may import geometry data-object types (not geometry algorithms).
+
+---
+
+## Sources
+
+- Phase 4.1, Document 06 — Repository organization (monorepo src/ layout).
+- Phase 4.2, Document 03 — Canonical data objects (D3–D6).
+- Phase 5.1, Document 06 — Development environment.
+- [G8] S. McConnell, *Code Complete*, 2nd ed. Microsoft Press, 2004 (file organization, public/private discipline).

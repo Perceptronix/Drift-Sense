@@ -1,0 +1,53 @@
+# SEMICON 2026 simulator — demo configuration (engineering smoke test)
+# Produces a tiny demonstration dataset (not DS1).
+
+general:
+  seed: 42
+  dataset_name: demo
+  dataset_version: 0.1.0
+
+structure:
+  structure_type: iso_line
+  cd_nm: 40.0
+  height_nm: 70.0
+  pitch_nm: null
+  width_nm: 320.0
+  height_nm_fov: 320.0
+  pixel_size_nm: 1.0
+
+variability:
+  enabled: true
+  ler_3sigma_nm: 1.5
+  ler_xi_nm: 20.0
+  overlay_dx_nm: 0.0
+  overlay_dy_nm: 0.0
+  cdu_sigma_nm: 0.0
+
+physics:
+  beam_energy_keV: 1.0
+  probe_current_pA: 50.0
+  probe_diameter_nm: 3.0
+  edge_factor: 2.0
+  noise_enabled: true
+  counts_per_electron: 200.0
+
+detector:
+  gain: 4000.0
+  bit_depth: 16
+
+dataset:
+  random_parameters: true
+  cd_range: [25, 80]
+  height_range: [40, 120]
+  pitch_range: [60, 200]
+  structure_distribution:
+    iso_line: 2
+    dense_ls: 2
+    contact: 2
+    via: 2
+    trench: 2
+    fin: 2
+    gate: 2
+    sti: 2
+    bimaterial: 2
+    pitch_std: 2

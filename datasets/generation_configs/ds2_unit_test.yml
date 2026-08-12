@@ -1,0 +1,66 @@
+# DS2 Unit-Test Dataset — Generation Config
+# Purpose: CI regression, golden-reference pinning
+# Version: 1.0.0 | Master seed: 2002 | Size: 100 @512x512
+# Frozen: Phase 5.5, Document 05
+
+dataset:
+  name: ds2_unit_test
+  version: 1.0.0
+  mode: batch
+  n_samples: 100
+  master_seed: 2002
+  license: "CC BY 4.0"
+
+image:
+  width: 512
+  height: 512
+  pixel_size_nm: 1.0
+  bit_depth: 16
+
+structure_distribution:            # uniform: 10 per structure type
+  iso_line: 10
+  dense_ls: 10
+  contact: 10
+  via: 10
+  trench: 10
+  fin: 10
+  gate: 10
+  sti: 10
+  bimaterial: 10
+  pitch_std: 10
+
+materials:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+
+parameter_ranges:                  # nominal + one boundary value per structure
+  cd_nm: [10, 30, 60, 200, 500]
+  height_nm: [20, 50, 100, 200]
+  pitch_nm: [20, 60, 150, 500, 1000]
+
+variability:
+  ler_3sigma_nm: [0.0, 0.5, 2.0, 5.0]
+  ler_xi_nm: [5, 20, 50, 100]
+  overlay_nm: [0.0, 5.0]
+  cdu_sigma_nm: [0.0, 1.0]
+
+physics:
+  beam_energy_keV: [0.3, 1.0, 5.0, 30.0]
+  probe_current_pA: [1.0, 50.0, 1000.0]
+  probe_diameter_nm: [0.5, 3.0, 10.0]
+  noise_enabled: [true, false]
+  charging_enabled: false
+
+ground_truth: true
+artifacts: [image, ground_truth, config, metadata]
+
+validation_gates: [L1, L2, L5]
+release_criteria:
+  - "golden hashes match committed reference"
+  - "CI regression green"
+
+expected_size: "~100 MB"

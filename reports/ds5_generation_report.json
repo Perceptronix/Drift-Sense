@@ -1,0 +1,141 @@
+{
+  "generation_summary": {
+    "n_total": 100000,
+    "n_ok": 10,
+    "n_failed": 0,
+    "n_failures": 0,
+    "structure_distribution": {
+      "dense_ls": 4,
+      "gate": 2,
+      "contact": 1,
+      "trench": 1,
+      "iso_line": 2
+    },
+    "avg_time_per_sample_s": 0,
+    "median_time_per_sample_s": 0,
+    "total_time_s": 8.7,
+    "throughput_samples_per_min": 68.6
+  },
+  "coverage": {
+    "total_completed": 10,
+    "structure_coverage": {
+      "all_types_present": false,
+      "covered": [
+        "contact",
+        "dense_ls",
+        "gate",
+        "iso_line",
+        "trench"
+      ],
+      "missing": [
+        "bimaterial",
+        "fin",
+        "pitch_std",
+        "sti",
+        "via"
+      ],
+      "distribution": {
+        "dense_ls": 4,
+        "gate": 2,
+        "contact": 1,
+        "trench": 1,
+        "iso_line": 2
+      }
+    },
+    "parameter_coverage": {
+      "cd_nm": {
+        "min": 28.27,
+        "max": 471.47,
+        "mean": 275.14,
+        "std": 137.05,
+        "target_range": [
+          10.0,
+          500.0
+        ]
+      },
+      "height_nm": {
+        "min": 25.91,
+        "max": 180.44,
+        "mean": 109.33,
+        "std": 54.21,
+        "target_range": [
+          20.0,
+          200.0
+        ]
+      },
+      "pitch_nm": {
+        "min": 83.03,
+        "max": 823.81,
+        "mean": 469.72,
+        "std": 245.08,
+        "target_range": [
+          20.0,
+          1000.0
+        ]
+      }
+    }
+  },
+  "integrity": {
+    "image_count": 10,
+    "ground_truth_count": 10,
+    "metadata_count": 10,
+    "expected_count": 10,
+    "missing_images": [],
+    "missing_ground_truth": [],
+    "missing_metadata": [],
+    "checksum_verified": 10,
+    "checksum_total": 10,
+    "duplicates_found": [],
+    "all_artifacts_present": true
+  },
+  "storage": {
+    "total_size_bytes": 135054006,
+    "total_size_gb": 0.13,
+    "total_files": 77,
+    "directory_sizes": {
+      "SHA256SUMS": 0.0,
+      "_lib_validation.gds": 0.0,
+      "checkpoint.json": 0.0,
+      "dataset_index.json": 10.1,
+      "ground_truth": 98.8,
+      "images": 19.8,
+      "metadata": 0.0,
+      "splits": 0.0
+    }
+  },
+  "splits": {
+    "train": 7,
+    "val": 1,
+    "test": 2
+  },
+  "config": {
+    "master_seed": 5005,
+    "n_samples": 100000,
+    "structure_distribution": {
+      "dense_ls": 20.0,
+      "contact": 15.0,
+      "iso_line": 15.0,
+      "via": 10.0,
+      "fin": 10.0,
+      "gate": 10.0,
+      "trench": 8.0,
+      "sti": 5.0,
+      "bimaterial": 4.0,
+      "pitch_std": 3.0
+    },
+    "parameter_ranges": {
+      "cd_nm": [
+        10.0,
+        500.0
+      ],
+      "height_nm": [
+        20.0,
+        200.0
+      ],
+      "pitch_nm": [
+        20.0,
+        1000.0
+      ]
+    }
+  }
+}

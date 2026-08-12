@@ -1,0 +1,20 @@
+{
+  "$comment": "DS2 dataset-level metadata record (TEMPLATE). Populated at generation time.",
+  "dataset": "ds2_unit_test",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0",
+  "purpose": "CI regression, golden-reference pinning",
+  "n_samples": 100,
+  "structure_distribution": { "uniform": "10 per structure type" },
+  "parameter_coverage": "nominal + boundary values",
+  "master_seed": 2002,
+  "image_size": [512, 512],
+  "pixel_size_nm": 1.0,
+  "ground_truth": "full",
+  "validation_gates": ["L1", "L2", "L5"],
+  "expected_size_mb": 100,
+  "golden_hashes": "<committed to tests/data/reference_hashes.json>",
+  "status": "NOT_YET_GENERATED",
+  "generation_date": null,
+  "release_criteria_met": false
+}

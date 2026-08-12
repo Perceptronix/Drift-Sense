@@ -1,0 +1,23 @@
+{
+  "image_size_pixels": [
+    1024,
+    1024
+  ],
+  "single_image_time_s": 3.812,
+  "peak_memory_mb": 132.0,
+  "parallel_times": {
+    "1": 2.837,
+    "2": 7.359,
+    "4": 11.816
+  },
+  "parallel_speedup": {
+    "1": 1.0,
+    "2": 0.39,
+    "4": 0.24
+  },
+  "performance_budget": {
+    "target_per_image_s": 3.0,
+    "target_speedup": 3.5,
+    "achieved": false
+  }
+}

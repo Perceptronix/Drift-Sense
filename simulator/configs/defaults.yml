@@ -1,0 +1,57 @@
+# SEMICON 2026 simulator — default configuration (frozen ranges, Phase 4.4)
+
+general:
+  seed: 42
+  dataset_name: demo
+  dataset_version: 0.1.0
+  log_level: INFO
+
+structure:
+  structure_type: iso_line
+  cd_nm: 30.0
+  height_nm: 60.0
+  pitch_nm: null            # null -> derived per structure type
+  width_nm: 300.0
+  height_nm_fov: 300.0
+  pixel_size_nm: 1.0
+  substrate_top_nm: 100.0
+  ss: 4                     # supersampling for mask rasterization
+
+process:
+  layer_stack: []
+
+variability:
+  enabled: true
+  ler_3sigma_nm: 1.5
+  ler_xi_nm: 20.0
+  overlay_dx_nm: 0.0
+  overlay_dy_nm: 0.0
+  cdu_sigma_nm: 0.0
+  cdu_xi_nm: 100.0
+
+physics:
+  beam_energy_keV: 1.0
+  probe_current_pA: 50.0
+  probe_diameter_nm: 3.0
+  edge_factor: 2.0
+  edge_width_nm: 8.0
+  charging_enabled: false
+  charge_factor: 0.15
+  charging_diffusion_nm: 50.0
+  counts_per_electron: 200.0
+  detector_noise_sigma: 0.02
+  noise_enabled: true
+
+detector:
+  gain: 4000.0
+  offset: 0.0
+  bit_depth: 16
+  saturate: true
+
+ground_truth:
+  enabled: true
+  edge_threshold_factor: 0.25
+
+dataset:
+  structure_distribution: null
+  random_parameters: false

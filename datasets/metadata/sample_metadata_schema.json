@@ -1,0 +1,78 @@
+{
+  "$comment": "Canonical per-sample metadata schema (Phase 4.4 doc 05; Phase 5.5 doc 05). Emitted as <sample>_metadata.json. All mandatory fields required.",
+  "type": "object",
+  "required": [
+    "structure", "process", "variability", "physics", "seeds", "version", "provenance"
+  ],
+  "properties": {
+    "structure": {
+      "type": "object",
+      "required": ["structure_type", "cd_nm", "height_nm"],
+      "properties": {
+        "structure_type": { "type": "string" },
+        "cd_nm": { "type": "number" },
+        "pitch_nm": { "type": ["number", "null"] },
+        "height_nm": { "type": "number" }
+      }
+    },
+    "process": {
+      "type": "object",
+      "required": ["layer_stack"],
+      "properties": {
+        "layer_stack": { "type": "array", "items": { "type": "object" } },
+        "process_steps": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "variability": {
+      "type": "object",
+      "properties": {
+        "ler_3sigma_nm": { "type": "number" },
+        "ler_xi_nm": { "type": "number" },
+        "overlay_dx_nm": { "type": "number" },
+        "overlay_dy_nm": { "type": "number" },
+        "cdu_sigma_nm": { "type": "number" }
+      }
+    },
+    "physics": {
+      "type": "object",
+      "required": ["beam_energy_keV", "probe_current_pA", "probe_diameter_nm"],
+      "properties": {
+        "beam_energy_keV": { "type": "number" },
+        "probe_current_pA": { "type": "number" },
+        "probe_diameter_nm": { "type": "number" },
+        "detector_config": { "type": "object" },
+        "noise_enabled": { "type": "boolean" },
+        "charging_enabled": { "type": "boolean" }
+      }
+    },
+    "seeds": {
+      "type": "object",
+      "required": ["master_seed", "sample_seed"],
+      "properties": {
+        "master_seed": { "type": "integer" },
+        "sample_seed": { "type": "string" },
+        "stage_seeds": { "type": "object" }
+      }
+    },
+    "version": {
+      "type": "object",
+      "required": ["app_version", "schema_version", "material_library_hash"],
+      "properties": {
+        "app_version": { "type": "string" },
+        "git_hash": { "type": "string" },
+        "schema_version": { "type": "string" },
+        "material_library_hash": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["generation_date", "dataset_name", "dataset_version"],
+      "properties": {
+        "generation_date": { "type": "string", "format": "date-time" },
+        "dataset_name": { "type": "string" },
+        "dataset_version": { "type": "string" },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

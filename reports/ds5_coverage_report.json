@@ -1,0 +1,59 @@
+{
+  "total_completed": 10,
+  "structure_coverage": {
+    "all_types_present": false,
+    "covered": [
+      "contact",
+      "dense_ls",
+      "gate",
+      "iso_line",
+      "trench"
+    ],
+    "missing": [
+      "bimaterial",
+      "fin",
+      "pitch_std",
+      "sti",
+      "via"
+    ],
+    "distribution": {
+      "dense_ls": 4,
+      "gate": 2,
+      "contact": 1,
+      "trench": 1,
+      "iso_line": 2
+    }
+  },
+  "parameter_coverage": {
+    "cd_nm": {
+      "min": 28.27,
+      "max": 471.47,
+      "mean": 275.14,
+      "std": 137.05,
+      "target_range": [
+        10.0,
+        500.0
+      ]
+    },
+    "height_nm": {
+      "min": 25.91,
+      "max": 180.44,
+      "mean": 109.33,
+      "std": 54.21,
+      "target_range": [
+        20.0,
+        200.0
+      ]
+    },
+    "pitch_nm": {
+      "min": 83.03,
+      "max": 823.81,
+      "mean": 469.72,
+      "std": 245.08,
+      "target_range": [
+        20.0,
+        1000.0
+      ]
+    }
+  }
+}
