@@ -8,6 +8,56 @@
 
 ---
 
+## Component 2 Submission Quick-Run (Mandatory Files)
+
+This repository now includes the exact standalone scripts needed for direct evaluation:
+
+- `dataset_generator.py` (standalone synthetic pair generator)
+- `localization_inference.py` (standalone localization inference entry point)
+- `model_weights/siamese_baseline_best.pt` (DL weight artifact, if needed)
+- `src/train_siamese.py` (training script)
+- `requirements.txt` (full pinned environment list)
+- `CITATION_REFERENCES.md` (augmentation/noise reference list)
+
+### Fresh-machine setup
+
+```bash
+git clone https://github.com/Perceptronix/Drift-Sense.git
+cd Drift-Sense
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 1) Generate sample image pairs (Reference + Search + GT center)
+
+```bash
+python dataset_generator.py \
+  --architecture-style DRAM \
+  --num-pairs 3 \
+  --output-dir submission_demo
+```
+
+Ground truth is saved in:
+- `submission_demo/ground_truth.json`
+- `submission_demo/ground_truth.csv`
+
+Each entry stores the true center `(center_x, center_y)` of the reference patch in the search image.
+
+### 2) Run localization inference (the script used for scoring)
+
+```bash
+python localization_inference.py \
+  --reference-image submission_demo/reference/pair_00000_reference.png \
+  --search-image submission_demo/search/pair_00000_search.png
+```
+
+Output format is a single coordinate line:
+```text
+x,y
+```
+
 ## Table of Contents
 
 - [1. Project Overview](#1-project-overview)
