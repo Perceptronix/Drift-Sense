@@ -4,6 +4,8 @@
 
 > A deterministic, physics-based simulator that generates large-scale, scientifically-grounded synthetic SEM datasets with pixel-accurate ground truth from GDSII semiconductor layouts to training-ready 16-bit TIFF images
 
+> DataSet : https://huggingface.co/datasets/yogeshn07/SEMICON-2026-Localization-DS5-v1
+
 ---
 
 ## Table of Contents
