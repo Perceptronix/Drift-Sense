@@ -14,8 +14,8 @@ This repository now includes the exact standalone scripts needed for direct eval
 
 - `dataset_generator.py` (standalone synthetic pair generator)
 - `localization_inference.py` (standalone localization inference entry point)
-- `model_weights/siamese_baseline_best.pt` (DL weight artifact, if needed)
-- `src/train_siamese.py` (training script)
+- `src/dinov2_fpn_heatmap.py` (DINO model definition used in the project)
+- `src/dinov2_heatmap_dataset.py` (DINO training dataset pipeline)
 - `requirements.txt` (full pinned environment list)
 - `CITATION_REFERENCES.md` (augmentation/noise reference list)
 

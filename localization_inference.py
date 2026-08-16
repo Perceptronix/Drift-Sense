@@ -41,31 +41,89 @@ def _candidate_scales(reference: np.ndarray, search: np.ndarray) -> list[float]:
     return sorted({float(s) for s in np.concatenate([scales, np.array([0.1, 0.2, 0.5, 1.0])]) if s > 0})
 
 
-def predict_center(reference: np.ndarray, search: np.ndarray) -> tuple[float, float]:
-    best_score = -1.0
-    best_center = None
-
+def _template_candidates(reference: np.ndarray, search: np.ndarray) -> list[dict]:
+    candidates = []
     for scale in _candidate_scales(reference, search):
         new_w = max(1, int(round(reference.shape[1] * scale)))
         new_h = max(1, int(round(reference.shape[0] * scale)))
-
         if new_h > search.shape[0] or new_w > search.shape[1] or new_h < 8 or new_w < 8:
             continue
 
         interp = cv2.INTER_AREA if scale < 1.0 else cv2.INTER_CUBIC
         template = cv2.resize(reference, (new_w, new_h), interpolation=interp)
-
         response = cv2.matchTemplate(search, template, cv2.TM_CCOEFF_NORMED)
         _, score, _, max_loc = cv2.minMaxLoc(response)
+        candidates.append(
+            {
+                "score": float(score),
+                "x": int(max_loc[0]),
+                "y": int(max_loc[1]),
+                "w": int(new_w),
+                "h": int(new_h),
+            }
+        )
 
-        if score > best_score:
-            best_score = score
-            best_center = (max_loc[0] + new_w / 2.0, max_loc[1] + new_h / 2.0)
+    candidates.sort(key=lambda item: item["score"], reverse=True)
+    return candidates[:8]
 
-    if best_center is None:
+
+def _try_dino_rerank(reference: np.ndarray, search: np.ndarray, candidates: list[dict]) -> tuple[float, float] | None:
+    if not candidates:
+        return None
+
+    try:
+        import torch
+        import torch.nn.functional as F
+    except Exception:
+        return None
+
+    try:
+        model = torch.hub.load("facebookresearch/dinov2", "dinov2_vits14")
+    except Exception:
+        return None
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = model.to(device).eval()
+
+    def _embed(image_2d: np.ndarray) -> "torch.Tensor":
+        patch = cv2.resize(image_2d, (224, 224), interpolation=cv2.INTER_AREA)
+        tensor = torch.from_numpy(patch).float().unsqueeze(0).unsqueeze(0).to(device)
+        tensor = tensor.repeat(1, 3, 1, 1)
+        with torch.no_grad():
+            features = model.forward_features(tensor)
+            return features["x_norm_clstoken"]
+
+    ref_embedding = _embed(reference)
+    best = None
+    best_sim = -1.0
+
+    for item in candidates:
+        crop = search[item["y"] : item["y"] + item["h"], item["x"] : item["x"] + item["w"]]
+        if crop.size == 0:
+            continue
+        emb = _embed(crop)
+        sim = float(F.cosine_similarity(ref_embedding, emb).item())
+        if sim > best_sim:
+            best_sim = sim
+            best = item
+
+    if best is None:
+        return None
+
+    return best["x"] + best["w"] / 2.0, best["y"] + best["h"] / 2.0
+
+
+def predict_center(reference: np.ndarray, search: np.ndarray) -> tuple[float, float]:
+    candidates = _template_candidates(reference, search)
+    if not candidates:
         raise RuntimeError("No valid template scale could be evaluated")
 
-    return best_center
+    dino_center = _try_dino_rerank(reference, search, candidates)
+    if dino_center is not None:
+        return dino_center
+
+    top = candidates[0]
+    return top["x"] + top["w"] / 2.0, top["y"] + top["h"] / 2.0
 
 
 def _parse_args() -> argparse.Namespace:
